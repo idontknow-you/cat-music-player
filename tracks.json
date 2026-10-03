@@ -1,5 +1,51 @@
 [
-    [
-     {"title": "Heaven Knows I'm Miserable Now", "artist": "The Smiths", "file": "/media/heaven-knows.mp3"}
-   ]
+  {
+    "title": "Heaven Knows I'm Miserable Now",
+    "artist": "The Smiths",
+    "file": "/media/heaven-knows.mp3"
+  },
+  {
+    "title": "There Is a Light That Never Goes Out",
+    "artist": "The Smiths",
+    "file": "/media/light-never-goes-out.mp3"
+  },
+  {"title": "Piano Man",
+   "artist": "Billy Joel",
+    "file": "/media/piano-man.mp3"},
+
+  {"title": "Smells Like Teen Spirit", 
+  "artist": "Nirvana", 
+  "file": "/media/smells-like-teen-spirit.mp3"},
+  
+  {"title": "Lovers Rock",
+  "artist": "TV Girl", 
+  "file": "/media/lovers-rock.mp3"},
+
+  {"title": "Creep", 
+  "artist": "Radiohead", 
+  "file": "/media/creep.mp3"},
+
+  {"title": "Don't Look Back in Anger", 
+  "artist": "Oasis", 
+  "file": "/media/dont-look-back-in-anger.mp3"},
+
+  {"title": "anything", 
+  "artist": "Adrianne Lenker", 
+  "file": "/media/anything.mp3"},
+
+  {"title": "No Surprises", 
+  "artist": "Radiohead", 
+  "file": "/media/no-surprises.mp3"},
+
+  {"title": "If I Leave", 
+  "artist": "Mitski", 
+  "file": "/media/if-i-leave.mp3"},
+
+  {"title": "Asleep", 
+  "artist": "The Smiths", 
+  "file": "/media/asleep.mp3"},
+
+  {"title": "Let Down", 
+  "artist": "Radiohead", 
+  "file": "/media/let-down.mp3"}
 ]

@@ -3,7 +3,30 @@ let tracks = [], i = 0, shuffle = false, repeat = false;
 const $ = id => document.getElementById(id);
 const fmt = s => (isNaN(s) || !isFinite(s)) ? '0:00' : Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
 const say = msg => $('nameTag').textContent = msg;
-const tryPlay = () => audio.play().catch(e => say('Cannot play: ' + e.message));
+// Web Audio analyser: drives the cat's beat pulse (falls back silently if unavailable)
+let actx, an, bins;
+function initAudio() {
+  if (actx) return;
+  try {
+    actx = new (window.AudioContext || window.webkitAudioContext)();
+    const src = actx.createMediaElementSource(audio);
+    an = actx.createAnalyser(); an.fftSize = 256;
+    src.connect(an); an.connect(actx.destination);
+    bins = new Uint8Array(an.frequencyBinCount);
+  } catch (e) { actx = an = null; }
+}
+(function pulse() {
+  requestAnimationFrame(pulse);
+  if (!an || audio.paused) return;
+  an.getByteFrequencyData(bins);
+  let sum = 0; for (let k = 0; k < 6; k++) sum += bins[k];
+  const b = sum / 6 / 255;
+  $('cat').style.setProperty('--beat', (Math.round(b * b * 3) / 3).toFixed(2)); // stepped, to stay pixel-like
+})();
+const tryPlay = () => {
+  initAudio(); if (actx && actx.state === 'suspended') actx.resume();
+  return audio.play().catch(e => say('Cannot play: ' + e.message));
+};
 
 fetch('/tracks.json')
   .then(r => { if (!r.ok) throw new Error('tracks.json not found'); return r.json(); })
@@ -34,8 +57,10 @@ $('next').onclick = next;
 $('prev').onclick = prev;
 $('shuffle').onclick = e => { shuffle = !shuffle; e.currentTarget.classList.toggle('on', shuffle); };
 $('repeat').onclick = e => { repeat = !repeat; e.currentTarget.classList.toggle('on', repeat); };
-$('vol').oninput = e => audio.volume = e.target.value;
-$('seek').oninput = e => { if (audio.duration) audio.currentTime = e.target.value / 100 * audio.duration; };
+const fill = el => el.style.setProperty('--p', (el.value - el.min) / (el.max - el.min) * 100 + '%');
+$('vol').oninput = e => { audio.volume = e.target.value; fill(e.target); };
+fill($('vol'));
+$('seek').oninput = e => { if (audio.duration) audio.currentTime = e.target.value / 100 * audio.duration; fill(e.target); };
 
 function setPlaying(on) {
   $('cat').className = 'cat ' + (on ? 'dancing' : 'sleeping');
@@ -48,6 +73,7 @@ audio.ontimeupdate = () => {
   $('cur').textContent = fmt(audio.currentTime);
   $('dur').textContent = fmt(audio.duration);
   $('seek').value = audio.currentTime / audio.duration * 100 || 0;
+  fill($('seek'));
 };
 audio.onended = () => repeat ? tryPlay() : next();
-audio.onerror = () => say('Cannot load: ' + decodeURI(audio.src.split('/').pop())); 
+audio.onerror = () => say('Cannot load: ' + decodeURI(audio.src.split('/').pop()));

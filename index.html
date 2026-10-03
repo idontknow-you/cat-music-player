@@ -4,10 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Cat Music Player</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/style.css">
 </head>
-<body class="min-h-screen bg-amber-50">
+<body class="min-h-screen">
   <!-- Icon sprite -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -18,57 +21,60 @@
     <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M17 2l4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 0 1-3 3H3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   </svg>
 
-  <main class="max-w-md mx-auto p-6 text-center">
-    <!-- Cat (SVG) -->
-    <div id="cat" class="cat sleeping">
-      <svg viewBox="0 0 200 170" width="200" height="170" aria-label="cat">
-        <polygon points="38,78 52,12 98,48" fill="#fbbf77"/>
-        <polygon points="162,78 148,12 102,48" fill="#fbbf77"/>
-        <polygon points="52,60 58,30 80,50" fill="#fda4af"/>
-        <polygon points="148,60 142,30 120,50" fill="#fda4af"/>
-        <ellipse cx="100" cy="108" rx="70" ry="58" fill="#fbbf77"/>
-        <circle cx="62" cy="122" r="9" fill="#fda4af" opacity=".6"/>
-        <circle cx="138" cy="122" r="9" fill="#fda4af" opacity=".6"/>
-        <g class="eyes-open">
-          <circle cx="75" cy="100" r="7" fill="#3b2a1a"/><circle cx="125" cy="100" r="7" fill="#3b2a1a"/>
-          <circle cx="77" cy="97" r="2.2" fill="#fff"/><circle cx="127" cy="97" r="2.2" fill="#fff"/>
-        </g>
-        <g class="eyes-closed" fill="none" stroke="#3b2a1a" stroke-width="3.5" stroke-linecap="round">
-          <path d="M65 102q10 8 20 0"/><path d="M115 102q10 8 20 0"/>
-        </g>
-        <polygon points="93,116 107,116 100,125" fill="#f472b6"/>
-        <path class="mouth-closed" d="M100 125q-6 9-14 4M100 125q6 9 14 4" fill="none" stroke="#3b2a1a" stroke-width="2.5" stroke-linecap="round"/>
-        <ellipse class="mouth-open" cx="100" cy="137" rx="9" ry="7" fill="#be123c"/>
-        <g stroke="#3b2a1a" stroke-width="2" stroke-linecap="round" opacity=".7">
-          <line x1="20" y1="112" x2="58" y2="118"/><line x1="20" y1="128" x2="58" y2="126"/>
-          <line x1="180" y1="112" x2="142" y2="118"/><line x1="180" y1="128" x2="142" y2="126"/>
-        </g>
-      </svg>
-    </div>
+  <div id="sky" aria-hidden="true">
+    <div id="stars"></div>
+    <div class="moon"></div>
+    <div id="bokeh"></div>
+    <svg id="city"></svg>
+  </div>
+  <div class="frame" aria-hidden="true"></div>
 
-    <div id="nameTag" class="name-tag">Loading...</div>
+  <main class="max-w-md mx-auto px-5 pt-8 pb-10 text-center">
+    <section class="stage">
+      <div id="cat" class="cat sleeping">
+        <div class="sprite" role="img" aria-label="Pixel-art calico cat"></div>
+      </div>
+      <div class="sill"></div>
+    </section>
 
-    <div class="flex items-center gap-2 mt-5">
-      <span id="cur" class="text-sm w-10">0:00</span>
-      <input id="seek" type="range" min="0" max="100" value="0" class="flex-1">
-      <span id="dur" class="text-sm w-10">0:00</span>
-    </div>
+    <section class="panel">
+      <div id="nameTag" class="name-tag">Loading...</div>
 
-    <div class="flex justify-center items-center gap-5 mt-4">
-      <button id="shuffle" class="ctl" aria-label="Shuffle"><svg><use href="#i-shuffle"/></svg></button>
-      <button id="prev" class="ctl" aria-label="Previous"><svg><use href="#i-prev"/></svg></button>
-      <button id="play" class="ctl big" aria-label="Play">
-        <svg class="ic-play"><use href="#i-play"/></svg>
-        <svg class="ic-pause" style="display:none"><use href="#i-pause"/></svg>
-      </button>
-      <button id="next" class="ctl" aria-label="Next"><svg><use href="#i-next"/></svg></button>
-      <button id="repeat" class="ctl" aria-label="Repeat"><svg><use href="#i-repeat"/></svg></button>
-    </div>
+      <div class="flex items-center gap-3 mt-5">
+        <span id="cur" class="time">0:00</span>
+        <input id="seek" type="range" min="0" max="100" value="0" class="flex-1" aria-label="Seek">
+        <span id="dur" class="time">0:00</span>
+      </div>
 
-    <input id="vol" type="range" min="0" max="1" step="0.01" value="0.8" class="mt-5" aria-label="Volume">
+      <div class="flex justify-center items-center gap-4 mt-5">
+        <button id="shuffle" class="ctl" aria-label="Shuffle"><svg><use href="#i-shuffle"/></svg></button>
+        <button id="prev" class="ctl" aria-label="Previous"><svg><use href="#i-prev"/></svg></button>
+        <button id="play" class="ctl big" aria-label="Play">
+          <svg class="ic-play"><use href="#i-play"/></svg>
+          <svg class="ic-pause" style="display:none"><use href="#i-pause"/></svg>
+        </button>
+        <button id="next" class="ctl" aria-label="Next"><svg><use href="#i-next"/></svg></button>
+        <button id="repeat" class="ctl" aria-label="Repeat"><svg><use href="#i-repeat"/></svg></button>
+      </div>
 
-    <ol id="playlist" class="mt-6 text-left"></ol>
+      <div class="flex items-center justify-center gap-3 mt-5">
+        <span class="time">vol</span>
+        <input id="vol" type="range" min="0" max="1" step="0.01" value="0.8" class="w-40" aria-label="Volume">
+      </div>
+
+      <ol id="playlist" class="mt-6 text-left"></ol>
+
+      <form id="request" class="request" autocomplete="off">
+        <h2>Request a song</h2>
+        <input id="rq-song" required maxlength="80" placeholder="Song title">
+        <input id="rq-artist" maxlength="80" placeholder="Artist">
+        <button class="ctl wide" type="submit">Send request</button>
+        <p id="rq-msg" role="status"></p>
+      </form>
+    </section>
   </main>
+  <script src="/scene.js"></script>
   <script src="/player.js"></script>
+  <script type="module" src="/request.js"></script>
 </body>
 </html>
