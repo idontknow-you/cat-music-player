@@ -16,7 +16,7 @@
   {"title": "Smells Like Teen Spirit", 
   "artist": "Nirvana", 
   "file": "/media/smells-like-teen-spirit.mp3"},
-  
+
   {"title": "Lovers Rock",
   "artist": "TV Girl", 
   "file": "/media/lovers-rock.mp3"},
@@ -47,5 +47,17 @@
 
   {"title": "Let Down", 
   "artist": "Radiohead", 
-  "file": "/media/let-down.mp3"}
+  "file": "/media/let-down.mp3"},
+
+  {"title": "Sweet Child O' Mine", 
+  "artist": "Guns N' Roses", 
+  "file": "/media/sweet-child-o-mine.mp3"},
+
+  {"title": "505", 
+  "artist": "Arctic Monekys", 
+  "file": "/media/505.mp3"},
+
+  {"title": "Can't Stop", 
+  "artist": "Red Hot Chili Peppers", 
+  "file": "/media/cant-stop.mp3"}
 ]
