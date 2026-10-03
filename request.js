@@ -18,45 +18,45 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const form = document.getElementById("request-form");
-const songInput = document.getElementById("request-song");
-const nameInput = document.getElementById("request-name");
-const statusEl = document.getElementById("request-status");
+const form = document.getElementById("request");
+const songInput = document.getElementById("rq-song");
+const artistInput = document.getElementById("rq-artist");
+const msgEl = document.getElementById("rq-msg");
 const submitBtn = form.querySelector("button[type='submit']");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const song = songInput.value.trim();
-  const name = nameInput.value.trim();
+  const artist = artistInput.value.trim();
 
   if (!song) {
-    statusEl.textContent = "Please enter a song name.";
+    msgEl.textContent = "Please enter a song title.";
     return;
   }
 
   // simple client-side cooldown (30s) to discourage spam
   const last = Number(localStorage.getItem("lastRequestAt") || 0);
   if (Date.now() - last < 30000) {
-    statusEl.textContent = "Easy there! Try again in a few seconds.";
+    msgEl.textContent = "Easy there! Try again in a few seconds.";
     return;
   }
 
   submitBtn.disabled = true;
-  statusEl.textContent = "Sending...";
+  msgEl.textContent = "Sending...";
 
   try {
-    await addDoc(collection(db, "song_requests"), {
-      song: song.slice(0, 100),
-      name: name.slice(0, 50),
+    await addDoc(collection(db, "requests"), {
+      song: song.slice(0, 80),
+      artist: artist.slice(0, 80),
       createdAt: serverTimestamp(),
     });
     localStorage.setItem("lastRequestAt", String(Date.now()));
     form.reset();
-    statusEl.textContent = "Request sent! 🐱";
+    msgEl.textContent = "Request sent! 🐱";
   } catch (err) {
     console.error(err);
-    statusEl.textContent = "Couldn't send, try again.";
+    msgEl.textContent = "Couldn't send, try again.";
   } finally {
     submitBtn.disabled = false;
   }
