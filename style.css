@@ -1,0 +1,29 @@
+/* ---------- Cat ---------- */
+.cat { display: flex; justify-content: center; transform-origin: 50% 90%; }
+.cat .eyes-open, .cat .mouth-open { display: none; }
+.cat.sleeping { animation: breathe 3s ease-in-out infinite; }
+.cat.sleeping .eyes-closed, .cat.sleeping .mouth-closed { display: inline; }
+.cat.dancing { animation: bob .6s ease-in-out infinite; }
+.cat.dancing .eyes-open, .cat.dancing .mouth-open { display: inline; }
+.cat.dancing .eyes-closed, .cat.dancing .mouth-closed { display: none; }
+@keyframes breathe { 50% { transform: scale(1.03); } }
+@keyframes bob { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-12px) rotate(3deg); } }
+
+/* ---------- Name tag ---------- */
+.name-tag { display: inline-block; margin-top: .5rem; padding: .4rem 1.1rem; border-radius: 9999px;
+  background: #fde68a; font-weight: 600; box-shadow: 0 2px 0 #f59e0b; }
+
+/* ---------- Controls ---------- */
+.ctl { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 9999px;
+  background: #fed7aa; color: #9a3412; transition: transform .15s, background .15s; }
+.ctl:hover { transform: scale(1.1); background: #fdba74; }
+.ctl:active { transform: scale(.92); }
+.ctl.big { width: 58px; height: 58px; background: #fb923c; color: #fff; }
+.ctl svg { width: 22px; height: 22px; }
+.ctl.big svg { width: 28px; height: 28px; }
+.ctl.on { background: #9a3412; color: #fff; }
+
+/* ---------- Playlist ---------- */
+#playlist li { cursor: pointer; padding: .5rem .75rem; border-radius: .5rem; }
+#playlist li:hover { background: #ffedd5; }
+#playlist li.active { background: #fed7aa; font-weight: 600; }
